@@ -1,8 +1,11 @@
-#Github Repository: hoxm/plnpl
+### hoxm/plnpl:
+https://github.com/hoxm/plnpl.git
+
+### Description:
 Programming Languages - Notes/Practice/libraries
 
-#Struction
+###Struction Overview
 
-## python: stuffs about python
-## shell:  stuffs about shell
+python: stuffs about python
+shell:  stuffs about shell
 
