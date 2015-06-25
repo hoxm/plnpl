@@ -2,10 +2,10 @@
 https://github.com/hoxm/plnpl.git
 
 ### Description:
-Programming Languages - Notes/Practice/libraries
+Programming Languages - Notes/Practice/Libraries
 
-###Struction Overview
+###Struction Overview:
 
-python: stuffs about python
-shell:  stuffs about shell
+    python: stuffs about python
+    shell:  stuffs about shell
 

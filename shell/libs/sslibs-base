@@ -1,0 +1,124 @@
+#!/bin/bash
+#===============================================================================
+# Description: Shell script libraries basic functions.
+#
+# Author: Junxian.Xiao (junxian_xiao@139.com)
+#===============================================================================
+
+#===============================================================================
+# Constant
+#===============================================================================
+SSLG_STD_DEBUG=0
+SSLG_STD_INFO=1
+SSLG_STD_WARNING=1
+SSLG_STD_ERROR=1
+SSLG_LOG_DEBUG=0
+SSLG_LOG_INFO=0
+SSLG_LOG_WARNING=0
+SSLG_LOG_ERROR=0
+SSLIBS_LOG_FILE="/tmp/sslibs.log"
+
+SSLIBS_CMDS="du awk grep sed sort uniq"
+#===============================================================================
+# Log Functions
+#===============================================================================
+_sslibs_log()
+{
+	local color=$1
+	local std=$2
+	local log=$3
+
+	shift 3
+
+	[ "$std" = "1" ] && {
+		echo -ne "\e[1;${color}m" ; echo "$@" ; echo -ne "\e[0m"
+	}
+
+	# log to file, and limite the file size to be less than 1M
+	[ "$log" = "1" ] || return 0
+	echo "$@" >> $SSLIBS_LOG_FILE
+	[ "$(du -b $SSLIBS_LOG_FILE | awk '{print $1}')" -gt "1024000" ] && {
+		sed -i -e "1,100d" $SSLIBS_LOG_FILE 2>/dev/null
+	}
+}
+
+sslibs_log_debug() {
+	_sslibs_log "0" "$SSLG_STD_DEBUG" "$SSLG_LOG_DEBUG" "$@"
+}
+
+sslibs_log_info() {
+	_sslibs_log "0" "$SSLG_STD_INFO" "$SSLG_LOG_INFO" "$@"
+}
+
+sslibs_log_warning() {
+	_sslibs_log "32" "$SSLG_STD_WARNING" "$SSLG_LOG_WARNING" "$@"
+}
+
+sslibs_log_error() {
+	_sslibs_log "31" "$SSLG_STD_ERROR" "$SSLG_LOG_ERROR" "$@"
+}
+
+sslibs_exit_error() {
+	sslibs_log_error "$@" ; exit 1
+}
+
+#===============================================================================
+# Exit Handler
+#===============================================================================
+sslibs_interrupt() {
+	sslibs_log_debug "" && sslibs_log_debug "Interrupted"
+	# do any clean up things here
+}
+
+sslibs_exit() {
+	sslibs_log_debug "Exiting ..."
+	# do any clean up things here
+}
+
+sslibs_trap_register() {
+	trap "sslibs_interrupt" SIGINT
+	trap "sslibs_exit" EXIT
+}
+
+#===============================================================================
+# Parameter Parse
+#===============================================================================
+# pattern format : "<option1-name>[:] <option2-name>[:] ..."
+# pattern example: "--enable-usb --format: -text -d -s:"
+#     option name must begin with "-" or "--", ":" means a value is required
+#===============================================================================
+sslibs_getopts_init()
+{
+	# Add a whitespace at the end for matching parameter easily.
+	local pattern="$1 "
+	local opt=""
+
+	# Jump over pattern
+	SSLG_OPTS="" && shift
+
+	while [ -n "$1" ] ; do
+		#change the format for grep search
+		opt=$(echo "$1" | sed 's/-/\\-/g')
+		if echo "$pattern" | grep -q "$opt " ; then
+			opt=$(echo "SSLG-OPT$1" | sed 's/-/_/g')
+			eval $opt="1"
+			SSLG_OPTS="$SSLG_OPTS $opt"
+			shift 1
+		elif echo "$pattern" | grep -q "${opt}: " ; then
+			if [ -z "$2" ] || echo "$2" | grep -q "^-.*" ; then
+				sslibs_log_error "Option $1 requires a value!"
+				SSLG_OPTS=""
+				return 1
+			fi
+			opt=$(echo "SSLG-OPT$1" | sed 's/-/_/g')
+			eval $opt=\""$2"\"
+			SSLG_OPTS="$SSLG_OPTS $opt"
+			shift 2
+		else
+			sslibs_log_error "Invalid Option: $1"
+			SSLG_OPTS=""
+			return 1
+		fi
+	done
+}
+

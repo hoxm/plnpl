@@ -1,0 +1,27 @@
+
+================================================================================
+                    sslibs (Shell Script Libraries)
+================================================================================
+sslibs repository is created to provide some shell common functions examples and
+some general shell knowledges.
+
+Another good and similar examples:
+https://github.com/jmcantrell/bashful
+
+#-------------------------------------------------------------------------------
+# Quickly start
+#-------------------------------------------------------------------------------
+sslibs-tool is a tool which is still in development, I assume it will provide
+the following function: (Please get help from "./sslibs-tool --help")
+
+1. List all variables and functions in the libs.
+2. Provide the self test interface of all the functions in libs.
+
+#-------------------------------------------------------------------------------
+# Files Description (./libs/xxx)
+#-------------------------------------------------------------------------------
+./docs/xxx
+	Some document about general shell knowledges.
+./libs/sslibs-xxx
+	sslibs-base: Basic functions about log, error handler, parameter parser.
+

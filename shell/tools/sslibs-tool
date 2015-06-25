@@ -1,0 +1,69 @@
+#!/bin/bash
+#===============================================================================
+# Description: Shell script libraries configuration tool.
+#
+# Author: Junxian.Xiao (junxian_xiao@139.com)
+#===============================================================================
+
+
+#===============================================================================
+# Constant
+#===============================================================================
+SSLG_HOME="$(dirname $0)/libs"
+
+for file in `ls ${SSLG_HOME}/sslibs-*` ; do
+	. $file
+done
+
+SET_CACHED_FILE="/tmp/_sslibs_tool_set_cache_file"
+EXPORT_CFG_FILE="/tmp/sslibs_export_conf_file"
+EXPORT_TMP_FILE="/tmp/sslibs_export_temp_file"
+
+#===============================================================================
+# FUNCTIONS
+#===============================================================================
+_sslibs_tool_list_var()
+{
+	[ -e "$SET_CACHED_FILE" ] || set > $SET_CACHED_FILE
+
+	if [ -n "$1" ] ; then
+	       	grep "^$1=" $SET_CACHED_FILE
+	else
+		grep "^SSLIBS.*=" $SET_CACHED_FILE
+	fi
+}
+
+_sslibs_tool_list_fun()
+{
+	[ -e "$SET_CACHED_FILE" ] || set > $SET_CACHED_FILE
+
+	if [ -n "$1" ] ; then
+		sed -n -e "/^\<$1\>/,/^\}/p" $SET_CACHED_FILE
+	else
+		grep "^sslibs_.*().*" $SET_CACHED_FILE | grep -v "^_.*" 
+	fi
+}
+
+_sslibs_tool_help()
+{
+	cat <<EOF
+$name <command> ...
+
+command
+=======
+    --help: Show this help menu.
+    listvar [name]: List variable value, list all if no name is set.
+    listfun [name]: List function code, list all names if no name is set.
+    <fun> [arg1] [arg2] ...  : Test the funciton with args.
+
+EOF
+	return 0
+}
+
+case $1 in
+	-h|--help) _sslibs_tool_help ;;
+	listvar) shift ; _sslibs_tool_list_var "$@" ;;
+	listfun) shift ; _sslibs_tool_list_fun "$@" ;;
+	*) eval "$@" ;;
+esac
+
