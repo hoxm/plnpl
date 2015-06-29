@@ -1,0 +1,30 @@
+{
+    "friends":[
+    {
+        "name": "Sensor1",
+        "alias": "RoomTemprature",
+        "type": "device",
+        "capability": [
+        {
+            "name": "temprature",
+            "alias": "What's the temprature?"
+        }
+        ]
+    },
+    {
+        "name": "Sensor2",
+        "alias": "RoomLight",
+        "type": "device",
+        "capability": [
+        {
+            "name": "turnOn",
+            "alias": "Please turn on the room light."
+        },
+        {
+            "name": "turnOff",
+            "alias": "Please turn off the room light."
+        }
+        ]
+    }
+    ]
+}

@@ -8,7 +8,7 @@ sys.path.append('../code/')
 
 from ui.console import ConsoleUI
 
-class WidgetTestCase(unittest.TestCase):
+class ConsoleUITestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.consoleUI = ConsoleUI()
