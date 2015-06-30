@@ -1,0 +1,38 @@
+
+1 Talk to Things Introduction
+===========================
+
+
+2 Fore-end UI
+===============
+
+2.1 ConsoleUI
+
+2.2 GUI
+
+2.3 WebUI
+
+
+3 Application Layer
+=====================
+
+Server/Client Structure
+
+RESTful APIs:
+
+http://localhost/ttt/1.0/name                              ['GET', 'PUT']
+http://localhost/ttt/1.0/friends                           ['GET']
+http://localhost/ttt/1.0/friend/<friend_name>              ['GET', 'POST']
+http://localhost/ttt/1.0/friend/commands/<friend_name>     ['GET']
+
+http://localhost/ttt/1.0/friend/command/alias/             ['PUT']
+data: {"friend":"<name>","command":{"name":"<cmd_name>","alias":"<alias>"}}
+
+
+
+4 Network layer based on Gateway
+================================
+
+
+5 Back-end edge devices manager
+===============================

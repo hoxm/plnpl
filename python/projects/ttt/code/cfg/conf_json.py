@@ -52,10 +52,7 @@ class JsonFriendsList:
         return [friend for friend in self.friends]
 
     def get_friend(self, name):
-        for friend in self.friends:
-            if(name == friend["name"]) :
-                return friend
-        return None
+        return filter(lambda f: f['name'] == name, self.friends)
 
     def set_friend_alias(self, name, alias):
         for i in range(len(self.friends)):
