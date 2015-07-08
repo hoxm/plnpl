@@ -16,6 +16,8 @@ class NwkHandler(StreamRequestHandler):
                 if data:
                     print "Receive[%r]: %s" %(self.client_address, data)
                     self.wfile.write(data.upper())
+                if data == 'exit':
+                    break
             except:
                 traceback.print_exc()
                 break
